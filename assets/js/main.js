@@ -154,3 +154,77 @@ window.addEventListener('DOMContentLoaded', function() {
   // ثم كل ثانية
   setInterval(updateDateTimeArabic, 1000);
 });
+
+
+
+
+
+
+
+
+// دالة تحويل الأرقام إلى عربية
+function animateCounter(element, start, end, duration) {
+    const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const value = Math.floor(progress * (end - start) + start);
+        
+        const arabicValue = value.toString().split('').map(digit => arabicDigits[digit]).join('');
+        element.textContent = arabicValue;
+        element.setAttribute('data-current-value', arabicValue);
+        
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        } else {
+            const finalArabicValue = end.toString().split('').map(digit => arabicDigits[digit]).join('');
+            element.textContent = finalArabicValue;
+            element.setAttribute('data-completed', 'true');
+        }
+    };
+    
+    window.requestAnimationFrame(step);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counter = entry.target;
+                const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+                
+                if (counter.getAttribute('data-completed') === 'true') {
+                    const end = parseInt(counter.getAttribute('data-purecounter-end') || 0);
+                    const finalArabicValue = end.toString().split('').map(digit => arabicDigits[digit]).join('');
+                    counter.textContent = finalArabicValue;
+                    return;
+                }
+                
+                if (!counter.getAttribute('data-started')) {
+                    counter.setAttribute('data-started', 'true');
+                    const start = parseInt(counter.getAttribute('data-purecounter-start') || 0);
+                    const end = parseInt(counter.getAttribute('data-purecounter-end') || 0);
+                    const duration = parseInt(counter.getAttribute('data-purecounter-duration') || 2) * 1000;
+                    
+                    animateCounter(counter, start, end, duration);
+                }
+            }
+        });
+    }, { threshold: 0.3 });
+    
+    document.querySelectorAll('.purecounter').forEach(counter => observer.observe(counter));
+});
+
+// إصلاح سريع عند التمرير
+setInterval(() => {
+    document.querySelectorAll('.purecounter[data-completed="true"]').forEach(counter => {
+        const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+        const end = parseInt(counter.getAttribute('data-purecounter-end') || 0);
+        const finalArabicValue = end.toString().split('').map(digit => arabicDigits[digit]).join('');
+        if (counter.textContent !== finalArabicValue) {
+            counter.textContent = finalArabicValue;
+        }
+    });
+}, 500);
