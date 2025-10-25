@@ -8388,7 +8388,7 @@ section,
 # Starter Section Section
 --------------------------------------------------------------*/
 .sitename {
-  font-size: 48px !important;
+  font-size: 36px !important;
 }
 
 .brd
@@ -8443,4 +8443,9 @@ section,
 }
 .beig{
   color: var(--background-color) !important;
+}
+.weam i{
+  color: var(--accent-color) !important;
+  padding: 0px 4px;
+
 }
