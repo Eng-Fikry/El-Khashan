@@ -8431,3 +8431,16 @@ section,
   content: "%";
   
 }
+
+.contact-section{
+  background-color: var(--background-color);
+}
+.border {
+    border: var(--bs-border-width) var(--bs-border-style) var(--accent-color) !important;
+}
+.hero .highlights-container .highlight-item{
+  background-color: var(--accent-color);
+}
+.beig{
+  color: var(--background-color) !important;
+}
